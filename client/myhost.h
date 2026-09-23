@@ -14,7 +14,7 @@ public:
     Q_INVOKABLE void disconnectFromServer();
     Q_INVOKABLE void sendMessage(const QString &messg);
 private:
-    QTcpSocket *host;//мб нужна инициализация базоавя
+    QTcpSocket *m_host;//мб нужна инициализация базоавя
 signals:
     void toUiConnected();
     void toUiDisconneted();
