@@ -4,7 +4,7 @@ import host
 
 Window {
     id: window
-    width: 500
+    width: 530
     height: 600
     visible: true
     title: "Chat"
@@ -35,7 +35,7 @@ Window {
         spacing: 5
         Row{
             //anchors.fill: parent
-            anchors.margins: 10
+            anchors.margins: 5
             spacing: 5
 
             //Кнопка подключения
@@ -52,6 +52,13 @@ Window {
                 //width: parent.width - 90
                 placeholderText: "Введите порт"
                 onAccepted: idBtn.clicked()
+            }
+            TextField {
+                id: nickname
+                text: "Dmitrii"
+                //width: parent.width - 90
+                placeholderText: "Введите имя"
+                //onAccepted: idBtn.clicked()
             }
             Button {
                 id: idBtn
@@ -70,7 +77,7 @@ Window {
                 id: chatLog
                 readOnly: true
                 width: parent.width//скролл длиннее чем окно переписки
-               height: parent.height
+                height: parent.effectiveScrollBarHeight
                 wrapMode: TextEdit.Wrap//перенос текста который шире чем ширина строки
                 // background: Rectangle { border.color: "#cccccc" }
                 onTextChanged: cursorPosition = length
@@ -97,7 +104,7 @@ Window {
                 onClicked: {
                     if (msgInput.text.length > 0) {
                         client.sendMessage(msgInput.text)
-                        chatLog.append("[Dmitrii]: " + msgInput.text + "\n")
+                        chatLog.append("["+nickname.text+"]: " + msgInput.text + "\n")
                         msgInput.clear()
                     }
                 }
