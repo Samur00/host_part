@@ -2,9 +2,9 @@
 #define MYHOST_H
 
 #include <QObject>
-#include <QTcpSocket>
 //#include <QtQml/qqmlregistration.h>???
 #include <qqmlregistration.h>
+class QTcpSocket;
 class MyHost : public QObject{
     Q_OBJECT
     QML_ELEMENT

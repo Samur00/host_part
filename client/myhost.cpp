@@ -1,5 +1,5 @@
 #include "myhost.h"
-
+#include <QTcpSocket>
 MyHost::MyHost(QObject *parent)
     : QObject{parent}{
     m_host=new QTcpSocket(this);
@@ -10,13 +10,15 @@ MyHost::MyHost(QObject *parent)
         emit toUiNewMessage(QString::fromUtf8(data));
     });
 }
+
 void MyHost::connectToServer(const QString &address, unsigned port){
     m_host->connectToHost(address, port);
 }
+
 void MyHost::disconnectFromServer(){
     m_host->disconnectFromHost();
 }
+
 void MyHost::sendMessage(const QString &messg){
     m_host->write(messg.toUtf8());//не понял почему ту стринг не рбаоет, write ждет имнно вектор char
-
 }
