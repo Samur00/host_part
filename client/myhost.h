@@ -2,24 +2,34 @@
 #define MYHOST_H
 
 #include <QObject>
-//#include <QtQml/qqmlregistration.h>???
 #include <qqmlregistration.h>
+
 class QTcpSocket;
-class MyHost : public QObject{
+
+class MyHost : public QObject {
     Q_OBJECT
-    QML_ELEMENT
+    Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectionChanged)
+
 public:
     explicit MyHost(QObject *parent = nullptr);
+
+    bool isConnected() const;
+
     Q_INVOKABLE void connectToServer(const QString &adpress, unsigned port);
     Q_INVOKABLE void disconnectFromServer();
     Q_INVOKABLE void sendMessage(const QString &messg);
+
 private:
-    QTcpSocket *m_host;//мб нужна инициализация базоавя
+    QTcpSocket *m_host{nullptr};
+
 signals:
+    void connectionChanged();
     void toUiConnected();
     void toUiDisconneted();
     void toUiNewMessage(const QString &message);
-private slots://не понял почему можно на сигнал вызвать сигнал
+    void messageSent(const QString &messg);
+
+private slots:
 };
 
 #endif // MYHOST_H

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import host
 
 Window {
     id: window
@@ -8,22 +7,6 @@ Window {
     height: 600
     visible: true
     title: "Chat"
-    ListModel{
-        id:chat
-    }
-    MyHost {
-        id: client
-
-        onToUiConnected: {
-            chatLog.append("[Система]: Подключено к серверу!\n")
-        }
-        onToUiDisconneted: {
-            chatLog.append("[Система]: Соединение разорвано.\n")
-        }
-        onToUiNewMessage: (message) => {
-                              chatLog.append("[Сервер]: " + message + "\n")
-                          }
-    }
 
     Column {
         anchors.fill: parent
@@ -33,7 +16,7 @@ Window {
         // anchors.topMargin: 0
         // anchors.bottomMargin: 20
         spacing: 5
-        Row{
+        Row {
             //anchors.fill: parent
             anchors.margins: 5
             spacing: 5
@@ -63,25 +46,23 @@ Window {
             Button {
                 id: idBtn
                 text: "Подключиться"
-                onClicked: client.connectToServer(ipAdress.text, parseInt(ipPort.text))
+                onClicked: host.connectToServer(ipAdress.text, parseInt(ipPort.text))
             }
         }
+
         //Область переписки со скроллом
-        ScrollView {
+        ListView {
+            id: chatView
             width: parent.width
             height: 400
-            clip: false
+            clip: true
+            model: chatModel
+            spacing: 4
+            onCountChanged: chatView.positionViewAtEnd()
 
-            //Область переписки
-            TextArea {
-                id: chatLog
-                readOnly: true
-                width: parent.width//скролл длиннее чем окно переписки
-                height: parent.effectiveScrollBarHeight
-                wrapMode: TextEdit.Wrap//перенос текста который шире чем ширина строки
-                // background: Rectangle { border.color: "#cccccc" }
-                onTextChanged: cursorPosition = length
-
+            delegate: Text {
+                text: "[" + model.sender + "]: " + model.text
+                color: model.isMe ? "green" : "black"
             }
         }
 
@@ -103,8 +84,7 @@ Window {
                 text: "Отравить"
                 onClicked: {
                     if (msgInput.text.length > 0) {
-                        client.sendMessage(msgInput.text)
-                        chatLog.append("["+nickname.text+"]: " + msgInput.text + "\n")
+                        host.sendMessage(msgInput.text)
                         msgInput.clear()
                     }
                 }
