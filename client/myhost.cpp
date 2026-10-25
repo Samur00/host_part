@@ -6,11 +6,8 @@ MyHost::MyHost(QObject *parent)
 {
     m_host = new QTcpSocket(this);
 
-    connect(m_host, &QTcpSocket::connected, this, &::MyHost::toUiConnected);
-    connect(m_host, &QTcpSocket::connected, this, &MyHost::connectionChanged);
-
-    connect(m_host, &QTcpSocket::disconnected, this, &::MyHost::toUiDisconneted);
-    connect(m_host, &QTcpSocket::disconnected, this, &MyHost::connectionChanged);
+    connect(m_host, &QTcpSocket::connected, this, &MyHost::toUiConnected);
+    connect(m_host, &QTcpSocket::disconnected, this, &MyHost::toUiDisconneted);
 
     connect(m_host, &QTcpSocket::readyRead, this, [this]() {
         QByteArray data = m_host->readAll();
@@ -35,6 +32,7 @@ void MyHost::disconnectFromServer()
 
 void MyHost::sendMessage(const QString &messg)
 {
-    m_host->write(messg.toUtf8()); //не понял почему ту стринг не рбаоет, write ждет имнно вектор char
-    emit messageSent(messg);
+    if (isConnected()) {
+        m_host->write(messg.toUtf8());
+    }
 }

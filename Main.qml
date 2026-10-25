@@ -11,52 +11,49 @@ Window {
     Column {
         anchors.fill: parent
         anchors.margins: 10
-        //anchors.leftMargin: 0
-        //anchors.rightMargin: 20
-        // anchors.topMargin: 0
-        // anchors.bottomMargin: 20
         spacing: 5
+
         Row {
-            //anchors.fill: parent
             anchors.margins: 5
             spacing: 5
 
-            //Кнопка подключения
+            // Кнопка подключения
             TextField {
                 id: ipAdress
                 text: "127.0.0.1"
-                //width: parent.width - 90
                 placeholderText: "Введите IP"
-                onAccepted: idBtn.clicked()//если поле селектед и нажимается энтер, идет эмит сигнала кликед для кнопки
+                onAccepted: idBtn.clicked() // если поле селектед и нажимается энтер, идет эмит сигнала кликед для кнопки
             }
             TextField {
                 id: ipPort
                 text: "11111"
-                //width: parent.width - 90
                 placeholderText: "Введите порт"
                 onAccepted: idBtn.clicked()
             }
             TextField {
                 id: nickname
                 text: "Dmitrii"
-                //width: parent.width - 90
                 placeholderText: "Введите имя"
-                //onAccepted: idBtn.clicked()
             }
             Button {
                 id: idBtn
-                text: "Подключиться"
-                onClicked: host.connectToServer(ipAdress.text, parseInt(ipPort.text))
+                text: chatController.isConnected ? "Отключиться" : "Подключиться"
+                onClicked: {
+                    if (chatController.isConnected)
+                        chatController.disconnectFromServer()
+                    else
+                        chatController.connectToServer(ipAdress.text, parseInt(ipPort.text))
+                }
             }
         }
 
-        //Область переписки со скроллом
+        // Область переписки со скроллом
         ListView {
             id: chatView
             width: parent.width
             height: 400
             clip: true
-            model: chatModel
+            model: chatController.messageModel
             spacing: 4
             onCountChanged: chatView.positionViewAtEnd()
 
@@ -66,7 +63,7 @@ Window {
             }
         }
 
-        //ввод
+        // Ввод
         Row {
             width: parent.width
             spacing: 5
@@ -80,11 +77,10 @@ Window {
 
             Button {
                 id: sendBtn
-                //width: 80
-                text: "Отравить"
+                text: "Отправить"
                 onClicked: {
                     if (msgInput.text.length > 0) {
-                        host.sendMessage(msgInput.text)
+                        chatController.sendMessage(msgInput.text)
                         msgInput.clear()
                     }
                 }

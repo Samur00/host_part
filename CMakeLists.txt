@@ -25,6 +25,8 @@ qt_add_qml_module(apphost
         client/datastorage.cpp
         client/messagemodel.h
         client/messagemodel.cpp
+        client/chatcontroller.h
+        client/chatcontroller.cpp
 )
 
 target_include_directories(apphost PRIVATE
