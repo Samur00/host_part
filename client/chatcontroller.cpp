@@ -1,7 +1,7 @@
 #include "chatcontroller.h"
 
 ChatController::ChatController(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, m_model{&m_storage, this}
 {
     connect(&m_host, &MyHost::toUiConnected, this, &ChatController::onNetworkConnected);
     connect(&m_host, &MyHost::toUiDisconneted, this, &ChatController::onNetworkDisconnected);
