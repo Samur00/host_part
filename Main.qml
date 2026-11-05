@@ -57,9 +57,26 @@ Window {
             spacing: 4
             onCountChanged: chatView.positionViewAtEnd()
 
-            delegate: Text {
-                text: "[" + model.sender + "]: " + model.text
-                color: model.isMe ? "green" : "black"
+            delegate:Item {
+                height: messageText.implicitHeight + 10
+                width: chatView.width
+                Text {
+                    id:message
+                    text: "[" + model.sender + "]: " + model.text
+                    color: model.isMe ? "green" : "black"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.right: cross.left
+                    anchors.rightMargin: 10
+                }
+            }
+            Text{
+                id:cross;
+                text: "✕"
+                color: "red"
+                anchors.right: parent.right
+                anchors.rightMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -87,4 +104,5 @@ Window {
             }
         }
     }
-} 
+}
+
